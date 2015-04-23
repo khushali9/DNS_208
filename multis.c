@@ -26,9 +26,7 @@ fd_set sock_desc;
 char buffer1[2000];  //data buffer1 
  
 //now set the socket descriptors
-          
- 
-   
+
 
     //here initialise all client_sock[] to 0 
     for (cl = 0; cl < max_client; cl++) 
