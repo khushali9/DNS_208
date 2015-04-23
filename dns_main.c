@@ -19,7 +19,7 @@
 #include "208DNS.h"
 
 
-#define MAX 20 //for max amount of client to connected
+#define MAX 3 // amount of client to connected
 #define TRUE   1
 #define FALSE  0
 
@@ -62,7 +62,7 @@ int main(int args, char *argv[])
     fd_set sock_desc;
     struct sockaddr_in servaddr;
     
-    char buffer1[2000];  //data buffer1
+    char host_cl[2000];  //data host_cl
     
     //now set the socket descriptors
     
@@ -181,7 +181,7 @@ int main(int args, char *argv[])
             if (FD_ISSET( sd , &sock_desc))
             {
                 //Check if it was for closing , and also read the incoming message
-                if ((valread = read( sd , buffer1, 1024)) == 0)
+                if ((valread = read( sd , host_cl, 1024)) == 0)
                 {
                     //Somebody disconnected , get his details and print               getpeername(sd , (struct sockaddr*)&servaddr , (socklen_t*)&addrlen);
                     printf("Host disconnected here sorry ip %s , port %d \n" , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));
@@ -195,12 +195,13 @@ int main(int args, char *argv[])
                 else
                 {
                     //set the string terminating NULL byte on the end of the data read
-                    buffer1[valread] = '\0';
-                    //puts(buffer1); host name recived checked.
+                    host_cl[valread] = '\0';
+                    //puts(host_cl); host name recived checked.
                     //printf("%s", );
+                   
                     
-                    
-                    send(sd , buffer1 , strlen(buffer1) , 0 );
+                    //this is reply ip address ,
+                    send(sd , host_cl , strlen(host_cl) , 0 );
                     
                 }
             }
