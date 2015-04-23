@@ -15,7 +15,11 @@
 
 #include "208DNS.h"
 
-#define T_A 1
+
+#define MAX 20 //for max amount of client to connected
+#define TRUE   1
+#define FALSE  0
+
 
 //global var
 char dns_servers[10][100];
