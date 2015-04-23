@@ -13,6 +13,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <sys/resource.h>
+#include <stdint.h>
 
 #include "208DNS.h"
 
@@ -26,7 +28,7 @@
 char dns_servers[10][100];
 
 //methods
-void getcon();
+void getcon(char *argv[]);
 void load_dns();
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 // connect to socket, Thread
@@ -54,11 +56,11 @@ int main(int args, char *argv[])
 
 	
 
-	getcon();
+	getcon(&argv[1]);
 	return 0;
 }
 
-void getcon()
+void getcon(char *argv[])
 {
     
         int opt = TRUE;
