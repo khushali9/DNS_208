@@ -211,7 +211,7 @@ void getcon()
             }
         }
         
-        return 0;
+       // return 0;
 }// end of getans()
 	
 
