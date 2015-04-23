@@ -28,8 +28,8 @@
 char dns_servers[10][100];
 
 //methods
-void getcon(char *argv[]);
-void load_dns();
+//void getcon(char *argv[]);
+void get_ip(char *host_cl);
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 // connect to socket, Thread
 //send recv ans
@@ -49,10 +49,8 @@ void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 
 int main(int args, char *argv[])
 {
-	unsigned char host[255];
-	//char **dns_addr = malloc(10 * sizeof(char *));
-
-	load_dns();
+	
+	
 
 	
 
@@ -202,6 +200,7 @@ int main(int args, char *argv[])
                     
                     //this is reply ip address ,
                     send(sd , host_cl , strlen(host_cl) , 0 );
+                    get_ip(host_cl);
                     
                 }
             }
@@ -211,12 +210,6 @@ int main(int args, char *argv[])
 	return 0;
 }
 
-void getcon(char *argv[])
-{
-    
-    
-       // return 0;
-}// end of getans()
 
 
 
@@ -224,11 +217,11 @@ void getcon(char *argv[])
 
 
 
-
-void load_dns()
+void get_ip(char* host_cl)
 {
     FILE *fp;
     char line[200] , *p;
+    printf("%s",host_cl);
 
 	int i = 0;
     if((fp = fopen("server_db.txt" , "r")) == NULL)
@@ -238,18 +231,19 @@ void load_dns()
     
     while(fgets(line , 200 , fp))
     {
-    	printf(" %s line\n", line );
+    	
         if(line[0] == '#')
         {
 
             continue;
         }
-        if(strcmp(line , "server") > 0)
+        if(strcmp(line , host_cl) > 0)
         {
         		
           strcpy(dns_servers[i], strtok(line, " "));
 		  strcpy(dns_servers[i], strtok(NULL, "\n"));
 			++i;
+            return;
         }
     }
      
