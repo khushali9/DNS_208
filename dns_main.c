@@ -201,6 +201,7 @@ int main(int args, char *argv[])
                     //this is reply ip address ,
                     send(sd , host_cl , strlen(host_cl) , 0 );
                     get_ip(host_cl);
+                  gets(dns_servers[0]);
                     
                 }
             }
@@ -221,7 +222,7 @@ void get_ip(char* host_cl)
 {
     FILE *fp;
     char line[200] , *p;
-    printf("%s",host_cl);
+    
 
 	int i = 0;
     if((fp = fopen("server_db.txt" , "r")) == NULL)
@@ -231,19 +232,21 @@ void get_ip(char* host_cl)
     
     while(fgets(line , 200 , fp))
     {
+         printf("%s",line);
+       
     	
         if(line[0] == '#')
         {
 
             continue;
         }
-        if(strcmp(line , host_cl) > 0)
+        if(strcmp(line , host_cl) >0 )
         {
-        		
+            gets(host_cl);
           strcpy(dns_servers[i], strtok(line, " "));
 		  strcpy(dns_servers[i], strtok(NULL, "\n"));
 			++i;
-            return;
+            break;
         }
     }
      
