@@ -35,7 +35,7 @@ int main(int argc , char *argv[])
     while(1)
    {
 printf("write your hostname : ");
-        gets(msg);
+        printf("%s",msg);
      
 if (send(sock,msg, 2000 , 0) < 0)
         {
@@ -43,13 +43,13 @@ if (send(sock,msg, 2000 , 0) < 0)
             return 1;
         }
 
-       msg=NULL;
-        if(recv(sock , msg , 2000 , 0) < 0)
+       //msg=NULL;
+        if(recv(sock , server_reply , 2000 , 0) < 0)
         {
            printf("recv failed");
             break;
         }
-        printf("Reply From Server : %s \n ",msg);  
+        printf("Reply From Server : %s \n ",server_reply);
 }
 
 
