@@ -9,7 +9,7 @@ int main(int argc , char *argv[])
 {
     int sock;
     struct sockaddr_in server_addr;
-    char msg[2000] , server_reply[2000];
+    char msg[2000];
 
     sock = socket(AF_INET , SOCK_STREAM , 0); //create socket
     if (sock == -1)
@@ -30,26 +30,28 @@ int main(int argc , char *argv[])
     }
 
     printf("Connected to server :) \n");
-
+ 
    //Server Reply
     while(1)
    {
-printf("write your hostname : ");
-        printf("%s",msg);
+       
+       printf("write your hostname : ");
+       scanf("%s",msg);
+
      
 if (send(sock,msg, 2000 , 0) < 0)
         {
             printf("send error");
             return 1;
         }
-
-       //msg=NULL;
-        if(recv(sock , server_reply , 2000 , 0) < 0)
+      
+if(recv(sock , msg , 2000 , 0) < 0)
         {
            printf("recv failed");
             break;
         }
-        printf("Reply From Server : %s \n ",server_reply);
+       
+        printf("Reply From Server : %s \n ",msg);
 }
 
 

@@ -203,8 +203,10 @@ int main(int args, char *argv[])
                     FILE *fp;
                     char line[200] , *p;
                     
-                    
-                    int i = 0;
+                   
+                    int i,j = 0;
+                     printf("%d",j);
+                    j++;
                     if((fp = fopen("server_db.txt" , "r")) == NULL)
                     {
                         printf("Failed opening server_db.txt file \n");
@@ -221,7 +223,9 @@ int main(int args, char *argv[])
                             
                             continue;
                         }
-                        
+                        if (strncmp("", host_cl,strlen(host_cl))==0) {
+                            printf("sorry no input recived");
+                        }
                         
                         if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
                         {
@@ -258,8 +262,10 @@ void get_ip(char* host_cl)
     FILE *fp;
     char line[200] , *p;
     
-
-	int i = 0;
+    
+    int i,j = 0;
+    printf("%d",j);
+    j++;
     if((fp = fopen("server_db.txt" , "r")) == NULL)
     {
         printf("Failed opening server_db.txt file \n");
@@ -267,45 +273,47 @@ void get_ip(char* host_cl)
     
     while(fgets(line , 200 , fp))
     {
-       //  printf("%s",line);
-       
+        //  printf("%s",line);
         
-    	
+        
+        
         if(line[0] == '#')
         {
-
+            
             continue;
         }
-     
+        if (strncmp("", host_cl,strlen(host_cl))==0) {
+            printf("sorry no input recived");
+        }
         
         if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
         {
             printf("equal");
-            //gets(host_cl);
+            
             strcpy(dns_servers[i], strtok(line, " "));
-            //printf("%s \n",dns_servers[0]);
+            
             strcpy(dns_servers[i], strtok(NULL, "\n"));
-           // printf("%s \n",dns_servers[0]);
-           // send(sd , dns_servers[0] , strlen(dns_servers[0]) , 0 );
+            printf("%s \n",dns_servers[0]);
+            
+            
+            send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
             break;
         }
     }
-     
-    //strcpy(dns_servers[0] , "207.206.209.222");
-    //strcpy(dns_servers[1] , "208.206.208.208");
+
 }
 
-void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host) 
+void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
 {
     int lock = 0 , i;
     strcat((char*)host,".");
-     
-    for(i = 0 ; i < strlen((char*)host) ; i++) 
+    
+    for(i = 0 ; i < strlen((char*)host) ; i++)
     {
-        if(host[i]=='.') 
+        if(host[i]=='.')
         {
             *dns++ = i-lock;
-            for(;lock<i;lock++) 
+            for(;lock<i;lock++)
             {
                 *dns++=host[lock];
             }
