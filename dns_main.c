@@ -30,7 +30,7 @@ char host_cl_1[2000];
 
 //methods
 //void getcon(char *argv[]);
-//void get_ip(char *host_cl);
+void get_ip(char *host_cl);
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 // connect to socket, Thread
 //send recv ans
@@ -192,9 +192,10 @@ int main(int argc , char *argv[])
                     buffer1[valread] = '\0';
                     //puts(buffer1); host name recived checked.
                     //printf("%s", );
+                    get_ip(buffer1);
+                     send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
                     
-                    
-                    send(sd , buffer1 , strlen(buffer1) , 0 );
+                    //send(sd , buffer1 , strlen(buffer1) , 0 );
                     
                 }
             }
@@ -218,8 +219,7 @@ void get_ip(char* host_cl)
     
     
     int i,j = 0;
-    printf("%d",j);
-    j++;
+ 
     if((fp = fopen("server_db.txt" , "r")) == NULL)
     {
         printf("Failed opening server_db.txt file \n");
@@ -238,24 +238,26 @@ void get_ip(char* host_cl)
         }
         if (strncmp("", host_cl,strlen(host_cl))==0) {
             printf("sorry no input recived");
+            //break;
+            return;
         }
         
         if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
         {
-            printf("equal");
+          //  printf("equal");
             
             strcpy(dns_servers[i], strtok(line, " "));
             
             strcpy(dns_servers[i], strtok(NULL, "\n"));
             printf("%s \n",dns_servers[0]);
-            
-            
-            send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
-            break;
+           
+            return;
         }
     }
 
 }
+
+
 
 void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
 {
