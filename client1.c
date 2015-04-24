@@ -43,7 +43,7 @@ if (send(sock,msg, 2000 , 0) < 0)
             return 1;
         }
 
-
+       msg=NULL;
         if(recv(sock , msg , 2000 , 0) < 0)
         {
            printf("recv failed");
