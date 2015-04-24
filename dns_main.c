@@ -226,15 +226,14 @@ int main(int args, char *argv[])
                         if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
                         {
                             printf("equal");
-                            //gets(host_cl);
+                            
                             strcpy(dns_servers[i], strtok(line, " "));
                             
                             strcpy(dns_servers[i], strtok(NULL, "\n"));
                             printf("%s \n",dns_servers[0]);
                             
-                            strcpy(host_cl_1,dns_servers[0]);
-                            printf("%s \n",host_cl_1);
-                            send(sd , host_cl_1 , strlen(host_cl_1) , 0 );
+                           
+                            send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
                             break;
                         }
                     }

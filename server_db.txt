@@ -1,2 +1,2 @@
 www.google.com 75.75.75.75
-server 75.75.75.76
+
