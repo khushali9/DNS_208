@@ -16,20 +16,21 @@
 #include <sys/resource.h>
 #include <stdint.h>
 
-#include "208DNS.h"
 
 
-#define MAX 3 // amount of client to connected
+
+#define MAX 3 // number of client to connected
 #define TRUE   1
 #define FALSE  0
 
 
 //global var
 char dns_servers[10][100];
+char host_cl_1[2000];
 
 //methods
 //void getcon(char *argv[]);
-void get_ip(char *host_cl);
+//void get_ip(char *host_cl);
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 // connect to socket, Thread
 //send recv ans
@@ -191,19 +192,54 @@ int main(int args, char *argv[])
                 
                 //Echo back the message that came in
                 else
-                {
+                { //ready the reply
                     //set the string terminating NULL byte on the end of the data read
                     host_cl[valread] = '\0';
                     //puts(host_cl); host name recived checked.
                     //printf("%s", );
-                   
                     
                     //this is reply ip address ,
-                    send(sd , host_cl , strlen(host_cl) , 0 );
-                    get_ip(host_cl);
-                  gets(dns_servers[0]);
+                    //send(sd , host_cl , strlen(host_cl) , 0 );
+                    FILE *fp;
+                    char line[200] , *p;
                     
-                }
+                    
+                    int i = 0;
+                    if((fp = fopen("server_db.txt" , "r")) == NULL)
+                    {
+                        printf("Failed opening server_db.txt file \n");
+                    }
+                    
+                    while(fgets(line , 200 , fp))
+                    {
+                        //  printf("%s",line);
+                        
+                        
+                        
+                        if(line[0] == '#')
+                        {
+                            
+                            continue;
+                        }
+                        
+                        
+                        if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
+                        {
+                            printf("equal");
+                            //gets(host_cl);
+                            strcpy(dns_servers[i], strtok(line, " "));
+                            
+                            strcpy(dns_servers[i], strtok(NULL, "\n"));
+                            printf("%s \n",dns_servers[0]);
+                            
+                            strcpy(host_cl_1,dns_servers[0]);
+                            printf("%s \n",host_cl_1);
+                            send(sd , host_cl_1 , strlen(host_cl_1) , 0 );
+                            break;
+                        }
+                    }
+                    
+                }// end of else reply ready
             }
         }
     }
@@ -234,29 +270,25 @@ void get_ip(char* host_cl)
     {
        //  printf("%s",line);
        
+        
     	
         if(line[0] == '#')
         {
 
             continue;
         }
-        if(strcmp(line , host_cl) > 0 )
-        {
-            printf("greated");
-            //gets(host_cl);
-          //strcpy(dns_servers[i], strtok(line, " "));
-		  //strcpy(dns_servers[i], strtok(NULL, "\n"));
-			//++i;
-            //break;
-        }
+     
         
-        if(strcmp(line , host_cl) < 0 )
-        {
-            printf("lesthan");
-        }
-        if(strcmp(line , host_cl) == 0 )
+        if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
         {
             printf("equal");
+            //gets(host_cl);
+            strcpy(dns_servers[i], strtok(line, " "));
+            //printf("%s \n",dns_servers[0]);
+            strcpy(dns_servers[i], strtok(NULL, "\n"));
+           // printf("%s \n",dns_servers[0]);
+           // send(sd , dns_servers[0] , strlen(dns_servers[0]) , 0 );
+            break;
         }
     }
      
