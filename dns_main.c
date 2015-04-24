@@ -232,7 +232,7 @@ void get_ip(char* host_cl)
     
     while(fgets(line , 200 , fp))
     {
-         printf("%s",line);
+       //  printf("%s",line);
        
     	
         if(line[0] == '#')
@@ -240,13 +240,23 @@ void get_ip(char* host_cl)
 
             continue;
         }
-        if(strcmp(line , host_cl) >0 )
+        if(strcmp(line , host_cl) > 0 )
         {
-            gets(host_cl);
-          strcpy(dns_servers[i], strtok(line, " "));
-		  strcpy(dns_servers[i], strtok(NULL, "\n"));
-			++i;
-            break;
+            printf("greated");
+            //gets(host_cl);
+          //strcpy(dns_servers[i], strtok(line, " "));
+		  //strcpy(dns_servers[i], strtok(NULL, "\n"));
+			//++i;
+            //break;
+        }
+        
+        if(strcmp(line , host_cl) < 0 )
+        {
+            printf("lesthan");
+        }
+        if(strcmp(line , host_cl) == 0 )
+        {
+            printf("equal");
         }
     }
      
