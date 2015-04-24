@@ -48,20 +48,15 @@ void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 //manually edit backend data
 
 
-int main(int args, char *argv[])
+int main(int argc , char *argv[])
 {
-	
-	
-
-	
-
     int opt = TRUE;
     int master_sock , new_sock , client_sock[MAX] , max_client = MAX , act, cl ,addrlen , valread , sd;
     int max_sd;
     fd_set sock_desc;
     struct sockaddr_in servaddr;
     
-    char host_cl[2000];  //data host_cl
+    char buffer1[2000];  //data buffer1
     
     //now set the socket descriptors
     
@@ -89,7 +84,7 @@ int main(int args, char *argv[])
     //type of socket created
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(atoi(argv[1]) );
+    servaddr.sin_port = htons( atoi(argv[1]) );
     
     //bind the socket to localhost port specified
     
@@ -180,7 +175,7 @@ int main(int args, char *argv[])
             if (FD_ISSET( sd , &sock_desc))
             {
                 //Check if it was for closing , and also read the incoming message
-                if ((valread = read( sd , host_cl, 1024)) == 0)
+                if ((valread = read( sd , buffer1, 1024)) == 0)
                 {
                     //Somebody disconnected , get his details and print               getpeername(sd , (struct sockaddr*)&servaddr , (socklen_t*)&addrlen);
                     printf("Host disconnected here sorry ip %s , port %d \n" , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));
@@ -192,62 +187,21 @@ int main(int args, char *argv[])
                 
                 //Echo back the message that came in
                 else
-                { //ready the reply
+                {
                     //set the string terminating NULL byte on the end of the data read
-                    host_cl[valread] = '\0';
-                    //puts(host_cl); host name recived checked.
+                    buffer1[valread] = '\0';
+                    //puts(buffer1); host name recived checked.
                     //printf("%s", );
                     
-                    //this is reply ip address ,
-                    //send(sd , host_cl , strlen(host_cl) , 0 );
-                    FILE *fp;
-                    char line[200] , *p;
                     
-                   
-                    int i,j = 0;
-                     printf("%d",j);
-                    j++;
-                    if((fp = fopen("server_db.txt" , "r")) == NULL)
-                    {
-                        printf("Failed opening server_db.txt file \n");
-                    }
+                    send(sd , buffer1 , strlen(buffer1) , 0 );
                     
-                    while(fgets(line , 200 , fp))
-                    {
-                        //  printf("%s",line);
-                        
-                        
-                        
-                        if(line[0] == '#')
-                        {
-                            
-                            continue;
-                        }
-                        if (strncmp("", host_cl,strlen(host_cl))==0) {
-                            printf("sorry no input recived");
-                        }
-                        
-                        if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
-                        {
-                            printf("equal");
-                            
-                            strcpy(dns_servers[i], strtok(line, " "));
-                            
-                            strcpy(dns_servers[i], strtok(NULL, "\n"));
-                            printf("%s \n",dns_servers[0]);
-                            
-                           
-                            send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
-                            break;
-                        }
-                    }
-                    
-                }// end of else reply ready
+                }
             }
         }
     }
-
-	return 0;
+    
+    return 0;
 }
 
 
