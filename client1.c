@@ -9,7 +9,7 @@ int main(int argc , char *argv[])
 {
     int sock;
     struct sockaddr_in server_addr;
-    char msg[2000];
+    char msg[2000],server_msg[2000]="";
 
     sock = socket(AF_INET , SOCK_STREAM , 0); //create socket
     if (sock == -1)
@@ -44,14 +44,17 @@ if (send(sock,msg, 2000 , 0) < 0)
             printf("send error");
             return 1;
         }
+       //strcpy(server_msg,NULL);
       
-if(recv(sock , msg , 2000 , 0) < 0)
+if(recv(sock , server_msg , 2000 , 0) < 0)
         {
            printf("recv failed");
             break;
         }
        
-        printf("Reply From Server : %s \n ",msg);
+        printf("Reply From Server : %s \n ",server_msg);
+       //strcpy(server_msg,NULL);
+       server_msg[2000]="";
 }
 
 

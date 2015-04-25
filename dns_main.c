@@ -175,9 +175,10 @@ int main(int argc , char *argv[])
             if (FD_ISSET( sd , &sock_desc))
             {
                 //Check if it was for closing , and also read the incoming message
-                if ((valread = read( sd , buffer1, 1024)) == 0)
+                if ((valread = read(sd,buffer1, 2024)) == 0)
                 {
-                    //Somebody disconnected , get his details and print               getpeername(sd , (struct sockaddr*)&servaddr , (socklen_t*)&addrlen);
+                    //Somebody disconnected , get his details and print
+                    getpeername(sd , (struct sockaddr*)&servaddr , (socklen_t*)&addrlen);
                     printf("Host disconnected here sorry ip %s , port %d \n" , inet_ntoa(servaddr.sin_addr) , ntohs(servaddr.sin_port));
                     
                     //Close the socket and mark as 0 in list for reuse
@@ -218,9 +219,7 @@ void get_ip(char* host_cl)
     char line[200] , *p;
     
     
-    int i,j = 0;
- 
-    if((fp = fopen("server_db.txt" , "r")) == NULL)
+       if((fp = fopen("server_db.txt" , "r")) == NULL)
     {
         printf("Failed opening server_db.txt file \n");
     }
@@ -236,19 +235,19 @@ void get_ip(char* host_cl)
             
             continue;
         }
-        if (strncmp("", host_cl,strlen(host_cl))==0) {
+        if (strncmp(host_cl,"",strlen(host_cl))==0) {
             printf("sorry no input recived");
             //break;
             return;
         }
         
-        if(strncmp(line , host_cl,strlen(host_cl)) == 0 )
+        if(strncmp(line,host_cl,strlen(host_cl)) == 0 )
         {
           //  printf("equal");
             
-            strcpy(dns_servers[i], strtok(line, " "));
+            strcpy(dns_servers[0], strtok(line, " "));
             
-            strcpy(dns_servers[i], strtok(NULL, "\n"));
+            strcpy(dns_servers[0], strtok(NULL, "\n"));
             printf("%s \n",dns_servers[0]);
            
             return;
