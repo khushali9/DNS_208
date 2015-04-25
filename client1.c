@@ -60,7 +60,7 @@ if(recv(sock , server_msg , 2000 , 0) < 0)
        //set response null
        int j;
        for (j = 0; j < 100; j++) {
-           server_msg[j] = '0';
+           server_msg[j] = '\0';
        }
 
 }
