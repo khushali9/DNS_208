@@ -54,7 +54,15 @@ if(recv(sock , server_msg , 2000 , 0) < 0)
        
         printf("Reply From Server : %s \n ",server_msg);
        //strcpy(server_msg,NULL);
-       server_msg[2000]="";
+       //strcpy(, "");
+      // server_msg[0] = '\0';
+       
+       //set response null
+       int j;
+       for (j = 0; j < 100; j++) {
+           server_msg[j] = '0';
+       }
+
 }
 
 

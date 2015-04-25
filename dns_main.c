@@ -197,6 +197,14 @@ int main(int argc , char *argv[])
                      send(sd ,dns_servers[0] , strlen(dns_servers[0]) , 0 );
                     
                     //send(sd , buffer1 , strlen(buffer1) , 0 );
+                    strcpy(dns_servers[0], "");
+                    
+                    int i, j;
+                    for (i = 0; i < 10; i++) {
+                        for (j = 0; j < 100; j++) {
+                            dns_servers[i][j] = '0';
+                        }
+                    }
                     
                 }
             }
@@ -236,8 +244,29 @@ void get_ip(char* host_cl)
             continue;
         }
         if (strncmp(host_cl,"",strlen(host_cl))==0) {
-            printf("sorry no input recived");
-            //break;
+          //  printf("sorry no input recived");
+            strcpy(dns_servers[0],"sorry no input recived");
+            return;
+        }
+        
+        if(strncmp(line,host_cl,strlen(host_cl)) < 0 )
+        {
+            //  printf("equal");
+            
+            strcpy(dns_servers[0], "Sorry not found");
+            
+            
+            
+            return;
+        }
+        if(strncmp(line,host_cl,strlen(host_cl)) > 0 )
+        {
+            //  printf("equal");
+            
+            strcpy(dns_servers[0], "Sorry not found");
+            
+            
+            
             return;
         }
         
