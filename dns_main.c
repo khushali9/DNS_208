@@ -31,6 +31,7 @@ char host_cl_1[2000];
 //methods
 //void getcon(char *argv[]);
 void get_ip(char *host_cl);
+void get_from_external(char* host_cl);
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
 // connect to socket, Thread
 //send recv ans
@@ -84,7 +85,7 @@ int main(int argc , char *argv[])
     //type of socket created
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons( atoi(argv[1]) );
+    servaddr.sin_port = htons(atoi(argv[1]) );
     
     //bind the socket to localhost port specified
     
@@ -245,22 +246,24 @@ void get_ip(char* host_cl)
         }
         if (strncmp(host_cl,"",strlen(host_cl))==0) {
           //  printf("sorry no input recived");
-            strcpy(dns_servers[0],"sorry no input recived");
+            //strcpy(dns_servers[0],"sorry no input recived");
+            get_from_external(host_cl);
             return;
         }
         
         if(strncmp(line,host_cl,strlen(host_cl)) < 0 )
         {
             
-            strcpy(dns_servers[0], "Sorry not found");
+           // strcpy(dns_servers[0], "Sorry not found");
+            get_from_external(host_cl);
             return;
         }
         if(strncmp(line,host_cl,strlen(host_cl)) > 0 )
         {
             //  printf("equal");
             
-            strcpy(dns_servers[0], "Sorry not found");
-            
+          //  strcpy(dns_servers[0], "Sorry not found");
+            get_from_external(host_cl);
             
             
             return;
@@ -271,9 +274,8 @@ void get_ip(char* host_cl)
           //  printf("equal");
             
             strcpy(dns_servers[0], strtok(line, " "));
-            
             strcpy(dns_servers[0], strtok(NULL, "\n"));
-            printf("%s \n",dns_servers[0]);
+            //printf("%s \n",dns_servers[0]);
            
             return;
         }
@@ -282,7 +284,10 @@ void get_ip(char* host_cl)
 }
 
 
-
+void get_from_external(char* host_cl)
+{
+     strcpy(dns_servers[0], "Sorry not found");
+}
 void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
 {
     int lock = 0 , i;
