@@ -287,6 +287,7 @@ void get_ip(char* host_cl)
 void get_from_external(char* host_cl)
 {
      strcpy(dns_servers[0], "Sorry not found");
+    return;
 }
 void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
 {
