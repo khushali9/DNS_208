@@ -1,7 +1,5 @@
 #include <stdlib.h>
 
-
-
 typedef struct header {
 	unsigned short id; //16 bit ID 
 	unsigned char qr : 1; //1 bit Query/ Response

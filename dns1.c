@@ -261,7 +261,7 @@ void ngethostbyname(unsigned char *host , int query_type)
             long *p;
             p=(long*)answers[i].rdata;
             a.sin_addr.s_addr=(*p); //working without ntohl
-            printf("has IPv4 address : %s",inet_ntoa(a.sin_addr));
+            printf("has IPv4 address : %s",inet_ntoa(a.sin_addr)); // here is the demon second one is down
         }
          
         if(ntohs(answers[i].resource->type)==5) 
@@ -296,7 +296,7 @@ void ngethostbyname(unsigned char *host , int query_type)
             long *p;
             p=(long*)addit[i].rdata;
             a.sin_addr.s_addr=(*p);
-            printf("has IPv4 address : %s",inet_ntoa(a.sin_addr));
+            printf("has IPv4 address : %s",inet_ntoa(a.sin_addr)); //another demon is here
         }
         printf("\n");
     }

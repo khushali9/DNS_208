@@ -33,6 +33,7 @@ char host_cl_1[2000];
 void get_ip(char *host_cl);
 void get_from_external(char* host_cl);
 void ChangetoDnsNameFormat(unsigned char*,unsigned char*);
+void gettime();
 // connect to socket, Thread
 //send recv ans
 //get servers
@@ -205,8 +206,9 @@ int main(int argc , char *argv[])
                         for (j = 0; j < 100; j++) {
                             dns_servers[i][j] = '\0';
                         }
-                    }
+                    }// SETTING DNS server field to null
                     
+                    void gettime();
                 }
             }
         }
@@ -281,6 +283,17 @@ void get_ip(char* host_cl)
         }
     }
 
+}
+void gettime()
+{
+    time_t current_time;
+    char* c_time_string;
+    
+    /* Obtain current time as seconds elapsed since the Epoch. */
+    current_time = time(NULL);
+    c_time_string = ctime(&current_time);
+    gets(c_time_string);
+    printf("Current time is %s", c_time_string);
 }
 
 
