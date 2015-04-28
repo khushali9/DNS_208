@@ -208,7 +208,7 @@ int main(int argc , char *argv[])
                         }
                     }// SETTING DNS server field to null
                     
-                    void gettime();
+                   // void gettime();
                 }
             }
         }
@@ -235,11 +235,23 @@ void get_ip(char* host_cl)
         printf("Failed opening server_db.txt file \n");
     }
     
+    FILE *fp1=fopen("server_db.txt" , "r");
+    int ch, number_of_lines = 0;
+    
+    do
+    {
+        ch = fgetc(fp1);
+        if(ch == '\n')
+            number_of_lines++;
+    } while (ch != EOF);
+    
+  //  printf(" Number of lines here in this file %d",number_of_lines);
+    int cnt_loop=0;
     while(fgets(line , 200 , fp))
     {
         //  printf("%s",line);
         
-        
+        cnt_loop++;
         
         if(line[0] == '#')
         {
@@ -248,7 +260,7 @@ void get_ip(char* host_cl)
         }
         if (strncmp(host_cl,"",strlen(host_cl))==0) {
           //  printf("sorry no input recived");
-            //strcpy(dns_servers[0],"sorry no input recived");
+            strcpy(dns_servers[0],"sorry no input recived");
             get_from_external(host_cl);
             //return;
             continue;
@@ -257,21 +269,29 @@ void get_ip(char* host_cl)
         
         if(strncmp(line,host_cl,strlen(host_cl)) < 0 )
         {
-            
-            strcpy(dns_servers[0], "too small");
-            //get_from_external(host_cl);
-            //return;
-            continue;
+            if (number_of_lines<cnt_loop)
+            {
+                //strcpy(dns_servers[0], "too small");
+                 get_from_external(host_cl);
+                return;
+
+                
+            }
+            else
+                continue;
         }
         if(strncmp(line,host_cl,strlen(host_cl)) > 0 )
         {
-            //  printf("equal");
-            
-           strcpy(dns_servers[0], "Really Big");
-           // get_from_external(host_cl);
-            
-            continue;
-            //return;
+            if (number_of_lines<cnt_loop)
+            {
+                //strcpy(dns_servers[0], "too small");
+                get_from_external(host_cl);
+                return;
+                
+                
+            }
+            else
+                continue;
         }
         
         if(strncmp(line,host_cl,strlen(host_cl)) == 0 )
@@ -296,8 +316,9 @@ void gettime()
     /* Obtain current time as seconds elapsed since the Epoch. */
     current_time = time(NULL);
     c_time_string = ctime(&current_time);
-    gets(c_time_string);
+
     printf("Current time is %s", c_time_string);
+    return;
 }
 
 
@@ -305,23 +326,4 @@ void get_from_external(char* host_cl)
 {
      strcpy(dns_servers[0], "Sorry not found");
     return;
-}
-void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
-{
-    int lock = 0 , i;
-    strcat((char*)host,".");
-    
-    for(i = 0 ; i < strlen((char*)host) ; i++)
-    {
-        if(host[i]=='.')
-        {
-            *dns++ = i-lock;
-            for(;lock<i;lock++)
-            {
-                *dns++=host[lock];
-            }
-            lock++; //or lock=i+1;
-        }
-    }
-    *dns++='\0';
 }
