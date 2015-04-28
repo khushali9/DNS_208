@@ -1,3 +1,4 @@
 www.facebook.com 78.89.92.90
 www.google.com 75.75.76.75
+www.fgg.com 25.75.76.75
 
