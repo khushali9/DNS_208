@@ -411,13 +411,14 @@ void get_dns_servers()
         {
             strcpy(dns_servers1[0], strtok(line1, " "));
             strcpy(dns_servers1[0], strtok(NULL, "\n"));
-            
+            //p = strtok(line , " ");
+            //p = strtok(NULL , " ");
             
         }
     }
     
-  //  strcpy(dns_servers1[0] , "208.67.222.222");
-    //strcpy(dns_servers1[1] , "208.67.220.220");
+    strcpy(dns_servers1[0] , "75.75.75.75");
+    strcpy(dns_servers1[1] , "208.67.220.220");
 }
 
 
@@ -469,7 +470,7 @@ void my_get_host_by_name(char *host_cl , int query_type)
     qinfo =(struct que_dns*)&buf[sizeof(struct header_dns) + (strlen((const char*)q_name) + 1)]; //fill it
     
     qinfo->qtype = htons( query_type ); //type of the query , A , MX , CNAME , NS etc
-    qinfo->qclass = htons(1); //its internet (lol)
+    qinfo->qclass = htons(1); //its internet
     
     printf("\nSending Packet...");
     if( sendto(s,(char*)buf,sizeof(struct header_dns) + (strlen((const char*)q_name)+1) + sizeof(struct que_dns),0,(struct sockaddr*)&dest,sizeof(dest)) < 0)
@@ -479,24 +480,24 @@ void my_get_host_by_name(char *host_cl , int query_type)
     printf("Done");
     
     //Receive the answer
-    i = sizeof dest;
-    printf("\nReceiving answer...");
+    i = sizeof(dest);
+    //puts("\n Receiving answer...");
     if(recvfrom (s,(char*)buf , 65536 , 0 , (struct sockaddr*)&dest , (socklen_t*)&i ) < 0)
     {
         perror("recvfrom failed");
     }
-    printf("Done");
+   // puts("Done");
     
     dns = (struct header_dns*) buf;
     
     //move ahead of the dns header and the query field
     reader = &buf[sizeof(struct header_dns) + (strlen((const char*)q_name)+1) + sizeof(struct que_dns)];
     
-    printf("\nThe response contains : ");
-    printf("\n %d que_dnss.",ntohs(dns->qdcount));
-    printf("\n %d answer1.",ntohs(dns->ancount));
-    printf("\n %d authooritative Servers.",ntohs(dns->nscount));
-    printf("\n %d Additional records.\n\n",ntohs(dns->arcount));
+    //printf("\nThe response contains : ");
+    //printf("\n %d que_dnss.",ntohs(dns->qdcount));
+    //printf("\n %d answer1.",ntohs(dns->ancount));
+   // printf("\n %d authooritative Servers.",ntohs(dns->nscount));
+    //printf("\n %d Additional records.\n\n",ntohs(dns->arcount));
     
     //Start reading answer1
     stop=0;
@@ -568,12 +569,15 @@ void my_get_host_by_name(char *host_cl , int query_type)
     }
     
     //print answer1
-    printf("\nAnswer Records : %d \n" , ntohs(dns->ancount) );
+  
+    
+printf("\nAnswer Records : %d \n" , ntohs(dns->ancount) );
+ //   puts((char)(ntohs(dns->ancount)));
     for(i=0 ; i < ntohs(dns->ancount) ; i++)
     {
         printf("Name : %s ",answer1[i].name);
         
-        if( ntohs(answer1[i].resource->type) == T_A) //IPv4 address
+        if(ntohs(answer1[i].resource->type) == T_A) //IPv4 address
         {
             long *p;
             p=(long*)answer1[i].rdata;

@@ -176,7 +176,7 @@ void ngethost_clbyname(unsigned char *host_cl , int query_type)
     reader = &buf[sizeof(struct header_dns) + (strlen((const char*)q_name)+1) + sizeof(struct que_dns)];
  
     printf("\nThe response contains : ");
-    printf("\n %d que_dnss.",ntohs(dns->qdcount));
+   printf"\n %d que_dnss.",ntohs(dns->qdcount));
     printf("\n %d answer1.",ntohs(dns->ancount));
     printf("\n %d authooritative Servers.",ntohs(dns->nscount));
     printf("\n %d Additional records.\n\n",ntohs(dns->arcount));
