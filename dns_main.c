@@ -250,25 +250,28 @@ void get_ip(char* host_cl)
           //  printf("sorry no input recived");
             //strcpy(dns_servers[0],"sorry no input recived");
             get_from_external(host_cl);
-            return;
+            //return;
+            continue;
+            
         }
         
         if(strncmp(line,host_cl,strlen(host_cl)) < 0 )
         {
             
-           // strcpy(dns_servers[0], "Sorry not found");
-            get_from_external(host_cl);
-            return;
+            strcpy(dns_servers[0], "too small");
+            //get_from_external(host_cl);
+            //return;
+            continue;
         }
         if(strncmp(line,host_cl,strlen(host_cl)) > 0 )
         {
             //  printf("equal");
             
-          //  strcpy(dns_servers[0], "Sorry not found");
-            get_from_external(host_cl);
+           strcpy(dns_servers[0], "Really Big");
+           // get_from_external(host_cl);
             
-            
-            return;
+            continue;
+            //return;
         }
         
         if(strncmp(line,host_cl,strlen(host_cl)) == 0 )
@@ -278,11 +281,12 @@ void get_ip(char* host_cl)
             strcpy(dns_servers[0], strtok(line, " "));
             strcpy(dns_servers[0], strtok(NULL, "\n"));
             //printf("%s \n",dns_servers[0]);
-           
             return;
+           // continue;
         }
     }
 
+    return;
 }
 void gettime()
 {
