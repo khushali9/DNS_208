@@ -323,7 +323,7 @@ void get_ip(char* host_cl)
             strcpy(dns_servers[0],"sorry no input recived");
           //  strcpy(,);
             strncpy((char*)host_cl_1, host_cl, 30);
-            printf("1111");
+           
             get_from_external(host_cl_1);
             //return;
             continue;
@@ -336,7 +336,7 @@ void get_ip(char* host_cl)
             {
                 //strcpy(dns_servers[0], "too small");
                 strncpy((char*)host_cl_1, host_cl, 30);
-                printf("1112");
+                
                 get_from_external(host_cl_1);
                 return;
 
@@ -352,7 +352,6 @@ void get_ip(char* host_cl)
                 //strcpy(dns_servers[0], "too small");
               //  strcpy(host_cl_1,(unsigned char*)host_cl);
                 strncpy((char*)host_cl_1, host_cl, 30);
-                printf("1113");
                 get_from_external(host_cl_1);
                 return;
                 
@@ -399,8 +398,14 @@ void get_from_external(unsigned char* host_cl)
    // now get the ip of this hostname
     //my_get_host_by_name(host_cl,T_A);
     char *buffer2=ngethostbyname(host_cl,T_A);
-    strcpy(dns_servers[0],buffer2);
+    printf("%s", buffer2);
+   // strcpy(dns_servers[0],buffer2);
+    //strcat(dns_servers[0],"The IP Address");
     //ngethost_clbyname(host_cl , T_A);
+    if (strncmp(buffer2,"",strlen(buffer2))==0)
+    {
+        printf("sfsklgnklsndglksngln ");
+    }
     return;
 }
 

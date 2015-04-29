@@ -12,6 +12,7 @@
 #include<unistd.h>    //getpid
  
 //List of DNS Servers registered on the system
+char dns_servers1[10][100];
 char dns_servers[10][100];
 //int dns_server_count = 0;
 //Types of DNS resource records :)
@@ -109,7 +110,7 @@ char* ngethostbyname(unsigned char *host , int query_type)
  
     dest.sin_family = AF_INET;
     dest.sin_port = htons(53);
-    dest.sin_addr.s_addr = inet_addr(dns_servers[0]); //dns servers
+    dest.sin_addr.s_addr = inet_addr(dns_servers1[0]); //dns servers
  
     //Set the DNS structure to standard queries
     dns = (struct DNS_HEADER *)&buf;
@@ -161,10 +162,12 @@ char* ngethostbyname(unsigned char *host , int query_type)
     reader = &buf[sizeof(struct DNS_HEADER) + (strlen((const char*)qname)+1) + sizeof(struct QUESTION)];
  
     printf("\nThe response contains : ");
-    printf("\n %d Questions.",ntohs(dns->q_count));
-    printf("\n %d Answers.",ntohs(dns->ans_count));
-    printf("\n %d Authoritative Servers.",ntohs(dns->auth_count));
-    printf("\n %d Additional records.\n\n",ntohs(dns->add_count));
+    strcat(dns_servers[0],"\nThe response contains : ");
+   // printf("\n %d Questions.",ntohs(dns->q_count));
+   //strcat(dns_servers[0],(short *)dns->q_count);
+  // printf("\n %d Answers.",ntohs(dns->ans_count));
+   // printf("\n %d Authoritative Servers.",ntohs(dns->auth_count));
+   // printf("\n %d Additional records.\n\n",ntohs(dns->add_count));
  
     //Start reading answers
     stop=0;
@@ -236,30 +239,45 @@ char* ngethostbyname(unsigned char *host , int query_type)
     }
  
     //print answers
-    printf("\nAnswer Records : %d \n" , ntohs(dns->ans_count) );
+    //printf("\nAnswer Records : %d \n" , ntohs(dns->ans_count) );
+    strcat(dns_servers[0],"\n Answer Records: ");
     for(i=0 ; i < ntohs(dns->ans_count) ; i++)
     {
         printf("Name : %s ",answers[i].name);
- 
+        strcat(dns_servers[0],"\n Name : ");
+        strcat(dns_servers[0],(char*)answers[i].name);
         if( ntohs(answers[i].resource->type) == T_A) //IPv4 address
         {
             long *p;
             p=(long*)answers[i].rdata;
             a.sin_addr.s_addr=(*p); //working without ntohl
             printf("has IPv4 address : %s",inet_ntoa(a.sin_addr));
+            strcat(dns_servers[0],"\n has IPv4 address :");
+            strcat(dns_servers[0],inet_ntoa(a.sin_addr));
         }
-         
+        else
+        {
+            strcat(dns_servers[0],"None");
+        }
         if(ntohs(answers[i].resource->type)==5) 
         {
             //Canonical name for an alias
             printf("has alias name : %s",answers[i].rdata);
+            strcat(dns_servers[0],"\n has alias name : ");
+            strcat(dns_servers[0],(char*)answers[i].rdata);
         }
+        else
+        {
+            strcat(dns_servers[0],"None");
+        }
+        
  
         printf("\n");
     }
  
     //print authorities
     printf("\nAuthoritive Records : %d \n" , ntohs(dns->auth_count) );
+    strcat(dns_servers[0],"\n Authoritive Records :");
     for( i=0 ; i < ntohs(dns->auth_count) ; i++)
     {
          
@@ -267,12 +285,20 @@ char* ngethostbyname(unsigned char *host , int query_type)
         if(ntohs(auth[i].resource->type)==2)
         {
             printf("has nameserver : %s",auth[i].rdata);
+            strcat(dns_servers[0],"\n has nameserver :  ");
+            strcat(dns_servers[0],(char*)auth[i].rdata);
+
+        }
+        else
+        {
+            strcat(dns_servers[0],"None");
         }
         printf("\n");
     }
  
     //print additional resource records
     printf("\nAdditional Records : %d \n" , ntohs(dns->add_count) );
+    strcat(dns_servers[0],"\n Additional Records :");
     for(i=0; i < ntohs(dns->add_count) ; i++)
     {
         printf("Name : %s ",addit[i].name);
@@ -282,6 +308,12 @@ char* ngethostbyname(unsigned char *host , int query_type)
             p=(long*)addit[i].rdata;
             a.sin_addr.s_addr=(*p);
             printf("has IPv4 address : %s",inet_ntoa(a.sin_addr));
+            strcat(dns_servers[0],"\n has IPv4 address :  ");
+            strcat(dns_servers[0],(char*)inet_ntoa(a.sin_addr));
+        }
+        else
+        {
+            strcat(dns_servers[0],"None");
         }
         printf("\n");
     }
@@ -373,8 +405,8 @@ void get_dns_servers()
         }
     }
      
-    strcpy(dns_servers[0] , "208.67.222.222");
-    strcpy(dns_servers[1] , "208.67.220.220");
+    strcpy(dns_servers1[0] , "208.67.222.222");
+    strcpy(dns_servers1[1] , "208.67.220.220");
 }
  
 /*
