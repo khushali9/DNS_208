@@ -85,9 +85,40 @@ typedef struct
     unsigned char *name;
     struct QUESTION *ques;
 } QUER;
- 
+ /*
+int main( int argc , char *argv[])
 
- 
+{
+    
+    unsigned char hostname[100];
+    
+    
+    
+    //Get the DNS servers from the resolv.conf file
+    
+    get_dns_servers();
+    
+    
+    
+    //Get the hostname from the terminal
+    
+    printf("Enter Hostname to Lookup : ");
+    
+    scanf("%s" , hostname);
+    
+    
+    
+    //Now get the ip of this hostname , A record
+    
+    ngethostbyname(hostname , T_A);
+    
+    
+    
+    return 0;
+    
+}
+  */
+
 /*
  * Perform a DNS query by sending a packet
  * */
@@ -240,7 +271,10 @@ char* ngethostbyname(unsigned char *host , int query_type)
  
     //print answers
     //printf("\nAnswer Records : %d \n" , ntohs(dns->ans_count) );
+    if(ntohs(dns->ans_count)!=0)
+    {
     strcat(dns_servers[0],"\n Answer Records: ");
+    }
     for(i=0 ; i < ntohs(dns->ans_count) ; i++)
     {
         printf("Name : %s ",answers[i].name);
@@ -271,7 +305,11 @@ char* ngethostbyname(unsigned char *host , int query_type)
  
     //print authorities
     printf("\nAuthoritive Records : %d \n" , ntohs(dns->auth_count) );
-    strcat(dns_servers[0],"\n Authoritive Records :");
+    if(ntohs(dns->auth_count)!=0)
+    {
+       strcat(dns_servers[0],"\n Authoritive Records :");
+    }
+    
     for( i=0 ; i < ntohs(dns->auth_count) ; i++)
     {
          
@@ -289,7 +327,11 @@ char* ngethostbyname(unsigned char *host , int query_type)
  
     //print additional resource records
     printf("\nAdditional Records : %d \n" , ntohs(dns->add_count) );
-    strcat(dns_servers[0],"\n Additional Records :");
+    if(ntohs(dns->add_count)!=0)
+    {
+       strcat(dns_servers[0],"\n Additional Records :");
+    }
+    
     for(i=0; i < ntohs(dns->add_count) ; i++)
     {
         printf("Name : %s ",addit[i].name);
@@ -305,7 +347,11 @@ char* ngethostbyname(unsigned char *host , int query_type)
       
         printf("\n");
     }
-     writetofile(host,inet_ntoa(a.sin_addr));
+    if (ntohs(dns->ans_count)!=0)
+    {
+       // writetofile(host,inet_ntoa(a.sin_addr));
+    }
+    
     return inet_ntoa(a.sin_addr);
 }
  
@@ -434,7 +480,8 @@ void writetofile(unsigned char* host_cl,char *buffer2)
     }
     else
     {
-        fprintf(fp2,"%s",buffer2);
+       // strncpy((char*)host_cl, buffer2, 15);
+        fprintf(fp2,"%s",host_cl);
     }
     fclose(fp2);
     return;
