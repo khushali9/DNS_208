@@ -18,50 +18,7 @@
 
 #include "dns1.c"
 
-typedef struct header_dns {
-    unsigned short id; //16 bit ID
-    unsigned char qr : 1; //1 bit Query/ Response
-    unsigned char opcode : 4; //4 bit kind of Query
-    unsigned char aa : 1; //
-    unsigned char tc : 1;
-    unsigned char rd : 1;
-    unsigned char ra : 1;
-    unsigned char z : 3;
-    unsigned char rcode : 4;
-    unsigned short qdcount;
-    unsigned short ancount; //ans count
-    unsigned short nscount; //auth count
-    unsigned short arcount; //additional resource count
-    unsigned char cd :1; // checking disabled
-    unsigned char ad :1; // authoenticated data
-}dns1;
 
-typedef struct que_dns {
-    unsigned short qtype;
-    unsigned short qclass;
-}dns2;
-
-typedef struct ans_dns {
-    unsigned short type;
-    unsigned short _class;
-    unsigned int ttl;
-    unsigned short rdlength;
-}dns3;
-
-//Pointers to resource record contents
-struct RECORD_RES
-{
-    unsigned char *name;
-    struct ans_dns *resource;
-    unsigned char *rdata;
-}dns4;
-
-//Structure of a Query
-typedef struct
-{
-    unsigned char *name;
-    struct que_dns *ques;
-} QUERY;
 
 #define MAX 3 // number of client to connected
 #define TRUE   1
@@ -89,6 +46,7 @@ void gettime();
 void get_dns_servers();
 void my_get_host_by_name(unsigned char *host , int query_type);
 u_char* ReadName(unsigned char* reader,unsigned char* buffer,int* count);
+void writetofile(unsigned char* host_cl,char *buffer2);
 
 void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host_cl);
 
@@ -402,10 +360,7 @@ void get_from_external(unsigned char* host_cl)
    // strcpy(dns_servers[0],buffer2);
     //strcat(dns_servers[0],"The IP Address");
     //ngethost_clbyname(host_cl , T_A);
-    if (strncmp(buffer2,"",strlen(buffer2))==0)
-    {
-        printf("sfsklgnklsndglksngln ");
-    }
+   
     return;
 }
 

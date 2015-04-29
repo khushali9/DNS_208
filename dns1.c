@@ -29,7 +29,7 @@ char* ngethostbyname(unsigned char *host , int query_type);
 void ChangetoDnsNameFormat (unsigned char*,unsigned char*);
 unsigned char* ReadName (unsigned char*,unsigned char*,int*);
 void get_dns_servers();
- 
+void writetofile(unsigned char* host_cl,char *buffer2);
 //DNS header structure
 struct DNS_HEADER
 {
@@ -255,10 +255,7 @@ char* ngethostbyname(unsigned char *host , int query_type)
             strcat(dns_servers[0],"\n has IPv4 address :");
             strcat(dns_servers[0],inet_ntoa(a.sin_addr));
         }
-        else
-        {
-            strcat(dns_servers[0],"None");
-        }
+       
         if(ntohs(answers[i].resource->type)==5) 
         {
             //Canonical name for an alias
@@ -266,10 +263,7 @@ char* ngethostbyname(unsigned char *host , int query_type)
             strcat(dns_servers[0],"\n has alias name : ");
             strcat(dns_servers[0],(char*)answers[i].rdata);
         }
-        else
-        {
-            strcat(dns_servers[0],"None");
-        }
+        
         
  
         printf("\n");
@@ -289,10 +283,7 @@ char* ngethostbyname(unsigned char *host , int query_type)
             strcat(dns_servers[0],(char*)auth[i].rdata);
 
         }
-        else
-        {
-            strcat(dns_servers[0],"None");
-        }
+        
         printf("\n");
     }
  
@@ -311,12 +302,10 @@ char* ngethostbyname(unsigned char *host , int query_type)
             strcat(dns_servers[0],"\n has IPv4 address :  ");
             strcat(dns_servers[0],(char*)inet_ntoa(a.sin_addr));
         }
-        else
-        {
-            strcat(dns_servers[0],"None");
-        }
+      
         printf("\n");
     }
+     writetofile(host,inet_ntoa(a.sin_addr));
     return inet_ntoa(a.sin_addr);
 }
  
@@ -431,4 +420,23 @@ void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
         }
     }
     *dns++='\0';
+}
+
+void writetofile(unsigned char* host_cl,char *buffer2)
+{
+    FILE *fp2;
+    char line[200] , *p;
+    
+    printf("In tbskjbdsjdljndklcdipshscin");
+    if((fp2 = fopen("server_db.txt" , "a")) == NULL)
+    {
+        printf("Failed opening server_db.txt file \n");
+    }
+    else
+    {
+        fprintf(fp2,"%s",buffer2);
+    }
+    fclose(fp2);
+    return;
+    
 }
