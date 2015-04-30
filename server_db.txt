@@ -1,3 +1,4 @@
-www.facebook.com 78.89.92.90
-www.google.com 75.75.76.75
-www.fgg.com 25.75.76.75
+www.facebook.com 31.13.77.6
+www.google.com 74.125.226.19
+www.khushali.desai 6.6.6.6
+www.boa.com. 65.254.231.128

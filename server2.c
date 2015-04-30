@@ -102,7 +102,7 @@ int main(int argc , char *argv[])
     
     //type of socket created
     servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = htons(atoi("130.65.25.1"));
+    servaddr.sin_addr.s_addr = htons(atoi("130.65.120.1"));
     servaddr.sin_port = htons(atoi(argv[1]) );
     
     //bind the socket to localhost port specified

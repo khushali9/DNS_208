@@ -18,7 +18,7 @@ int main(int argc , char *argv[])
     }
     printf("Socket created");
 
-    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    server_addr.sin_addr.s_addr = inet_addr("130.65.25.1");
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(argv[1]));
     

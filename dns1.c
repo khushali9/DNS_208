@@ -84,8 +84,8 @@ typedef struct
 {
     unsigned char *name;
     struct QUESTION *ques;
-} QUER;
- /*
+} QUERY;
+/*
 int main( int argc , char *argv[])
 
 {
@@ -117,7 +117,7 @@ int main( int argc , char *argv[])
     return 0;
     
 }
-  */
+*/
 
 /*
  * Perform a DNS query by sending a packet
@@ -349,7 +349,7 @@ char* ngethostbyname(unsigned char *host , int query_type)
     }
     if (ntohs(dns->ans_count)!=0)
     {
-       // writetofile(host,inet_ntoa(a.sin_addr));
+       writetofile(host,inet_ntoa(a.sin_addr));
     }
     
     return inet_ntoa(a.sin_addr);
@@ -369,12 +369,12 @@ u_char* ReadName(unsigned char* reader,unsigned char* buffer,int* count)
  
     name[0]='\0';
  
-    //read the names in 3www6google3com format
+    //read the names in number
     while(*reader!=0)
     {
         if(*reader>=192)
         {
-            offset = (*reader)*256 + *(reader+1) - 49152; //49152 = 11000000 00000000 ;)
+            offset = (*reader)*256 + *(reader+1) - 49152;
             reader = buffer + offset - 1;
             jumped = 1; //we have jumped to another location so counting wont go up!
         }
@@ -394,10 +394,10 @@ u_char* ReadName(unsigned char* reader,unsigned char* buffer,int* count)
     name[p]='\0'; //string complete
     if(jumped==1)
     {
-        *count = *count + 1; //number of steps we actually moved forward in the packet
+        *count = *count + 1; //number  forward in the packet
     }
  
-    //now convert 3www6google3com0 to www.google.com
+    //now convert to normal form
     for(i=0;i<(int)strlen((const char*)name);i++) 
     {
         p=name[i];
@@ -444,10 +444,8 @@ void get_dns_servers()
     strcpy(dns_servers1[1] , "208.67.220.220");
 }
  
-/*
- * This will convert www.google.com to 3www6google3com 
- * got it :)
- * */
+
+//number format
 void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host) 
 {
     int lock = 0 , i;
@@ -470,20 +468,44 @@ void ChangetoDnsNameFormat(unsigned char* dns,unsigned char* host)
 
 void writetofile(unsigned char* host_cl,char *buffer2)
 {
-    FILE *fp2;
+    FILE *fp2,*fp3;
     char line[200] , *p;
+    unsigned char* host_cl1,buffer2_1;
+  //  strncpy(host_cl1,host_cl);
+    //strncpy(buffer2_1,buffer2);
     
-    printf("In tbskjbdsjdljndklcdipshscin");
+   
     if((fp2 = fopen("server_db.txt" , "a")) == NULL)
     {
         printf("Failed opening server_db.txt file \n");
     }
     else
     {
-       // strncpy((char*)host_cl, buffer2, 15);
-        fprintf(fp2,"%s",host_cl);
+        
+        strcat((char*)host_cl," ");
+        strcat((char*)host_cl,buffer2);
+       //strncpy((char*)host_cl, buffer2, 15);
+        fprintf(fp2,"\n%s",host_cl);
     }
     fclose(fp2);
+    
+//    printf("In tbskjbdsjdljndklcdipshscin");
+   /* if((fp3 = fopen("/etc/host" , "a")) == NULL)
+    {
+        printf("Failed opening server_db.txt file \n");
+    }
+    else
+    {
+        //strcat(buffer2_1," ");
+        //strcat(buffer2_1,(char*)host_cl1);
+        //strcat(buffer2_1,(char*)host_cl1);
+        //strncpy((char*)host_cl, buffer2, 15);
+        fprintf(fp3,"\n%s","31.13.77.69 www.facebook.com");
+    }
+    fclose(fp3);
+    */
+    
+    
     return;
     
 }
